@@ -21,12 +21,6 @@ cidrs_gcp=$(wget -qO- https://www.gstatic.com/ipranges/cloud.json | grep -o "$CI
 echo -n "GCP CIDRs: "
 echo "$cidrs_gcp" | wc -l
 
-# Azure
-azure_url=$(wget -qO- -U Mozilla https://www.microsoft.com/en-us/download/confirmation.aspx?id=56519 | grep -Eo 'https://download\.microsoft\.com/download/[^"]+\.json' | head -n 1)
-cidrs_azure=$(wget -qO- "$azure_url" | grep -o "$CIDR_REGEX" | sort -V)
-echo -n "Azure CIDRs: "
-echo "$cidrs_azure" | wc -l
-
 # Oracle Cloud
 cidrs_oracle=$(wget -qO- https://docs.oracle.com/iaas/tools/public_ip_ranges.json | grep -o "$CIDR_REGEX" | sort -V)
 echo -n "Oracle Cloud CIDRs: "
@@ -66,7 +60,6 @@ echo '"cidr","hostmin","hostmax","vendor"' > datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_aws" "AWS" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_cloudflare" "Cloudflare" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_gcp" "GCP" >> datacenters.csv
-get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_azure" "Azure" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_oracle" "Oracle Cloud" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_digitalocean" "DigitalOcean" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_fastly" "Fastly" >> datacenters.csv
