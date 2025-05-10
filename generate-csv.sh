@@ -42,7 +42,7 @@ echo -n "Yandex Cloud CIDRs: "
 echo "$cidrs_yandex" | wc -l
 
 # Zusammenführen und Duplikate entfernen
-echo -e "$cidrs_aws\n$cidrs_cloudflare\n$cidrs_gcp\n$cidrs_azure\n$cidrs_oracle\n$cidrs_digitalocean\n$cidrs_fastly\n$cidrs_yandex" | sort -V | uniq > datacenters.txt
+echo -e "$cidrs_aws\n$cidrs_cloudflare\n$cidrs_gcp\n$cidrs_oracle\n$cidrs_digitalocean\n$cidrs_fastly\n$cidrs_yandex" | sort -V | uniq > datacenters.txt
 
 # Funktion zur Erstellung der CSV-Datei
 get_csv_of_low_and_high_ip_from_cidr_list() {
