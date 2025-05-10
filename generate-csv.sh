@@ -41,8 +41,33 @@ cidrs_yandex=$(wget -qO- https://yandex.cloud/en/docs/overview/concepts/public-i
 echo -n "Yandex Cloud CIDRs: "
 echo "$cidrs_yandex" | wc -l
 
+# Hetzner (manuelle IP-Liste)
+cidrs_hetzner=$(wget -qO- https://robot.your-server.de/doc/webservice/en.html | grep -o "$CIDR_REGEX" | sort -V || true)
+echo -n "Hetzner CIDRs: "
+echo "$cidrs_hetzner" | wc -l
+
+# OVH
+cidrs_ovh=$(wget -qO- https://www.ovh.com/engine/ip-loadbalancing.json | grep -o "$CIDR_REGEX" | sort -V || true)
+echo -n "OVH CIDRs: "
+echo "$cidrs_ovh" | wc -l
+
+# Akamai
+cidrs_akamai=$(wget -qO- https://techdocs.akamai.com/property-mgr/reference/akamai-ip-ranges | grep -o "$CIDR_REGEX" | sort -V || true)
+echo -n "Akamai CIDRs: "
+echo "$cidrs_akamai" | wc -l
+
+# Alibaba Cloud
+cidrs_alibaba=$(wget -qO- https://intl.aliyun.com/help/doc-detail/92683.htm | grep -o "$CIDR_REGEX" | sort -V || true)
+echo -n "Alibaba Cloud CIDRs: "
+echo "$cidrs_alibaba" | wc -l
+
+# Linode
+cidrs_linode=$(wget -qO- https://geoip.linode.com/ | grep -o "$CIDR_REGEX" | sort -V || true)
+echo -n "Linode CIDRs: "
+echo "$cidrs_linode" | wc -l
+
 # Zusammenführen und Duplikate entfernen
-echo -e "$cidrs_aws\n$cidrs_cloudflare\n$cidrs_gcp\n$cidrs_oracle\n$cidrs_digitalocean\n$cidrs_fastly\n$cidrs_yandex" | sort -V | uniq > datacenters.txt
+echo -e "$cidrs_aws\n$cidrs_cloudflare\n$cidrs_gcp\n$cidrs_oracle\n$cidrs_digitalocean\n$cidrs_fastly\n$cidrs_yandex\n$cidrs_hetzner\n$cidrs_ovh\n$cidrs_akamai\n$cidrs_alibaba\n$cidrs_linode" | sort -V | uniq > datacenters.txt
 
 # Funktion zur Erstellung der CSV-Datei
 get_csv_of_low_and_high_ip_from_cidr_list() {
@@ -64,5 +89,10 @@ get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_oracle" "Oracle Cloud" >> data
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_digitalocean" "DigitalOcean" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_fastly" "Fastly" >> datacenters.csv
 get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_yandex" "Yandex Cloud" >> datacenters.csv
+get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_hetzner" "Hetzner" >> datacenters.csv
+get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_ovh" "OVH" >> datacenters.csv
+get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_akamai" "Akamai" >> datacenters.csv
+get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_alibaba" "Alibaba Cloud" >> datacenters.csv
+get_csv_of_low_and_high_ip_from_cidr_list "$cidrs_linode" "Linode" >> datacenters.csv
 
 echo "Success!"
